@@ -213,6 +213,7 @@ code {
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
+  --font-sans: var(--font-switzer);
   --font-display: var(--font-limelight), sans-serif;
   --font-display--font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   --font-display--font-variation-settings: 'opsz' 32;
