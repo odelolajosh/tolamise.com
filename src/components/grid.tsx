@@ -23,13 +23,11 @@ export const Card = ({
   className,
   title,
   description,
-  header,
   icon,
 }: {
   className?: string
   title?: string | React.ReactNode
   description?: string | React.ReactNode
-  header?: React.ReactNode
   icon?: React.ReactNode
 }) => {
   return (
@@ -41,7 +39,6 @@ export const Card = ({
     >
       <div className="relative flex flex-1 w-full h-full min-h-24 rounded-xl bg-grid-black/[0.07] dark:bg-grid-white/[0.08]">
         <div className="absolute pointer-events-none inset-0 rounded-xl bg-inherit dark:bg-black mask-[linear-gradient(to_bottom,transparent_70%,hsl(var(--card)))]" />
-        {header}
       </div>
       <div className="group-hover/bento:translate-x-2 transition duration-200 flex flex-col gap-4 p-4">
         {icon}

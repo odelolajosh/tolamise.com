@@ -16,11 +16,7 @@ const navigation = [
   },
 ] as Array<{ to: Omit<NavigationTo, '/'>; label: string }>
 
-export type NavigationProps = {
-  exclude?: Array<NavigationTo> | NavigationTo
-}
-
-export const Navigation = ({ exclude }: NavigationProps) => {
+export const Navigation = () => {
   const { pathname } = useLocation()
 
   const indexed = pathname == '/'
@@ -44,10 +40,9 @@ export const Navigation = ({ exclude }: NavigationProps) => {
         </ul>
       )}
       <ul className="w-full flex gap-8 list-none m-0">
-        {navigation.map(({ to, label }) => {
-          if (exclude && (exclude.includes(to) || exclude === to)) return null
-          return <NavigationLink key={to} to={to} label={label} />
-        })}
+        {navigation.map(({ to, label }) => (
+          <NavigationLink key={to} to={to} label={label} />
+        ))}
       </ul>
     </nav>
   )
