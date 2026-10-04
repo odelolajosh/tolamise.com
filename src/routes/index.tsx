@@ -5,10 +5,17 @@ import { Footer } from '@/components/footer'
 import { cn } from '@/lib/utils'
 
 export const Route = createFileRoute('/')({
+  // Picked in the loader so SSR and hydration agree; staleTime keeps it until refresh
+  loader: () => ({
+    nameFont: Math.random() < 0.5 ? 'font-display' : 'font-display-secondary',
+  }),
+  staleTime: Infinity,
   component: App,
 })
 
 function App() {
+  const { nameFont } = Route.useLoaderData()
+
   return (
     <div className="min-h-screen relative py-10 grid grid-rows-[1fr_auto]">
       <div
@@ -28,7 +35,10 @@ function App() {
             // initial={{ opacity: 0, y: 20 }}
             // animate={{ opacity: 1, y: 0 }}
             // transition={{ duration: 0.5 }}
-            className="uppercase font-display font-semibold text-center text-7xl sm:text-7xl text-foreground dark:text-neutral-500 opacity-20"
+            className={cn(
+              'uppercase font-semibold text-center text-7xl sm:text-7xl text-foreground dark:text-neutral-500 opacity-20',
+              nameFont,
+            )}
           >
             Oluwatolamise
           </motion.h1>
@@ -36,7 +46,10 @@ function App() {
             // initial={{ opacity: 0, y: 20 }}
             // animate={{ opacity: 1, y: 0 }}
             // transition={{ duration: 0.5 }}
-            className="uppercase font-display font-semibold text-center text-7xl sm:text-7xl text-foreground dark:bg-clip-text dark:text-transparent dark:bg-linear-to-b dark:from-neutral-200 dark:to-neutral-500"
+            className={cn(
+              'uppercase font-semibold text-center text-7xl sm:text-7xl text-foreground dark:bg-clip-text dark:text-transparent dark:bg-linear-to-b dark:from-neutral-200 dark:to-neutral-500',
+              nameFont,
+            )}
           >
             Joshua Odelola
           </motion.h1>
