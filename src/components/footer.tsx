@@ -1,4 +1,5 @@
 import { GithubIcon, LinkedInIcon } from './icons'
+import { ModeToggle } from './theme/theme-toggle'
 
 export const Footer = () => (
   <footer id="contact-me" className="relative px-8 flex flex-col gap-4">
@@ -18,6 +19,9 @@ export const Footer = () => (
         >
           <LinkedInIcon />
         </a>
+      </li>
+      <li>
+        <ModeToggle />
       </li>
     </ul>
     <div className="flex justify-center">
