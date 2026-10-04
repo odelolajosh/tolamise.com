@@ -33,6 +33,8 @@ export const Route = createRootRoute({
     ],
   }),
   loader: () => getThemeServerFn(),
+  // Only refetch the theme after setTheme invalidates, not on every navigation
+  staleTime: Infinity,
   notFoundComponent: () => <div>Not found</div>,
   shellComponent: RootDocument,
 })
@@ -41,7 +43,11 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   const theme = Route.useLoaderData()
 
   return (
-    <html className={theme !== "system" ? theme : ""} lang="en" suppressHydrationWarning>
+    <html
+      className={theme !== 'system' ? theme : ''}
+      lang="en"
+      suppressHydrationWarning
+    >
       <head>
         <HeadContent />
       </head>
