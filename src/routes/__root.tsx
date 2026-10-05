@@ -1,10 +1,14 @@
+import { lazy } from 'react'
 import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { TanStackDevtools } from '@tanstack/react-devtools'
 
 import appCss from '../styles.css?url'
 import { ThemeProvider } from '@/components/theme/theme-provider'
 import { getThemeServerFn } from '@/lib/theme'
+
+// Loaded only in dev; the devtools crash when imported during production SSR
+const Devtools = import.meta.env.DEV
+  ? lazy(() => import('@/components/devtools'))
+  : () => null
 
 export const Route = createRootRoute({
   head: () => ({
@@ -53,17 +57,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <ThemeProvider theme={theme}>{children}</ThemeProvider>
-        <TanStackDevtools
-          config={{
-            position: 'bottom-right',
-          }}
-          plugins={[
-            {
-              name: 'Tanstack Router',
-              render: <TanStackRouterDevtoolsPanel />,
-            },
-          ]}
-        />
+        <Devtools />
         <Scripts />
       </body>
     </html>
