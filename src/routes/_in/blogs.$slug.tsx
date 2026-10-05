@@ -5,13 +5,22 @@ import { getPostBySlug } from '@/lib/api'
 import { Markdown } from '@/components/markdown'
 
 export const getPost = createServerFn()
-  .inputValidator((data: { slug: string }) => data)
+  .validator((data: { slug: string }) => data)
   .handler(async ({ data: { slug } }) => {
     return getPostBySlug(slug)
   })
 
 export const Route = createFileRoute('/_in/blogs/$slug')({
-  head: () => ({
+  loader: async ({ params: { slug } }) => {
+    const post = await getPost({ data: { slug } })
+    if (!post) throw notFound()
+    return { post }
+  },
+  head: ({ loaderData }) => ({
+    meta: [
+      { title: loaderData?.post.title },
+      { name: 'description', content: loaderData?.post.excerpt },
+    ],
     links: [
       {
         rel: 'stylesheet',
@@ -19,11 +28,6 @@ export const Route = createFileRoute('/_in/blogs/$slug')({
       },
     ],
   }),
-  loader: async ({ params: { slug } }) => {
-    const post = await getPost({ data: { slug } })
-    if (!post) throw notFound()
-    return { post }
-  },
   component: RouteComponent,
 })
 
@@ -32,8 +36,8 @@ function RouteComponent() {
   return (
     <>
       <header className="flex flex-col gap-2" aria-label="blog header">
-        <h1>{post.title}</h1>
-        <div className="text-muted-foreground">{post.description}</div>
+        <h1 className="font-display">{post.title}</h1>
+        <div className="text-muted-foreground">{post.excerpt}</div>
         <div>{post.readingTime}</div>
       </header>
       <article

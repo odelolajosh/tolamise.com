@@ -1,9 +1,9 @@
 import { Link, useLocation } from '@tanstack/react-router'
 import { Joshua } from './joshua'
-import type { FileRoutesByPath } from '@tanstack/react-router'
 import { cn } from '@/lib/utils'
+import { FileRoutesByTo } from '@/routeTree.gen'
 
-export type NavigationTo = keyof FileRoutesByPath
+export type NavigationTo = keyof FileRoutesByTo
 
 const navigation = [
   {
@@ -14,32 +14,25 @@ const navigation = [
     to: '/blogs',
     label: 'Blog',
   },
-] as Array<{ to: Omit<NavigationTo, '/'>; label: string }>
+] as Array<{ to: NavigationTo; label: string }>
 
 export const Navigation = () => {
   const { pathname } = useLocation()
-
   const indexed = pathname == '/'
 
   return (
-    <nav
-      className={cn('relative flex flex-col md:flex-row gap-2 items-center', {
-        'pb-4 border-b border-solid border-border': !indexed,
-      })}
-    >
-      {!indexed && (
-        <ul className="w-full flex gap-4 list-none m-0">
-          <li className="m-0">
-            <Link
-              to="/"
-              className="no-underline text-foreground transition-colors"
-            >
-              <Joshua />
-            </Link>
-          </li>
-        </ul>
-      )}
-      <ul className="w-full flex gap-8 list-none m-0">
+    <nav className={cn('relative flex flex-col sm:flex-row gap-2 items-center')}>
+      <ul className={cn("absolute left-0 top-1/2 z-10 -translate-y-1/2 flex gap-4 list-none m-0", { "hidden": indexed })}>
+        <li className="m-0">
+          <Link
+            to="/"
+            className="no-underline text-foreground transition-colors"
+          >
+            <Joshua />
+          </Link>
+        </li>
+      </ul>
+      <ul className="w-full flex justify-center gap-8 list-none m-0">
         {navigation.map(({ to, label }) => (
           <NavigationLink key={to} to={to} label={label} />
         ))}

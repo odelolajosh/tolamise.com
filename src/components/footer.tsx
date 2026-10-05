@@ -6,6 +6,7 @@ export const Footer = () => (
     <ul className="flex gap-4 justify-center items-center text-muted-foreground m-0 list-none">
       <li>
         <a
+          aria-label="Github profile link"
           href="https://github.com/odelolajosh"
           className="hover:text-foreground"
         >
@@ -14,6 +15,7 @@ export const Footer = () => (
       </li>
       <li>
         <a
+          aria-label="LinkedIn profile link"
           href="https://www.linkedin.com/in/joshua-odelola"
           className="hover:text-foreground"
         >
