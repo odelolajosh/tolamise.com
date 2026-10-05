@@ -1,21 +1,23 @@
 import matter from 'gray-matter'
-import { getContentFile } from './content'
+import { ContentNotFoundError, getContentFile, getContentJson } from './content'
 import type { Post, Project } from './definition'
 
 type BlogIndex = {
-  posts: Exclude<Post, 'body'>[]
+  posts: Array<Omit<Post, 'body'>>
 }
 
-export const getProjectRepositories = async (): Promise<Project[]> => {
-  return getContentFile("projects.json", { format: "json" })
+const SLUG = /^[a-z0-9-]+$/
+
+export const getProjectRepositories = async () => {
+  return getContentJson<Array<Project>>('projects.json')
 }
 
-export const getBlogIndex = async (): Promise<BlogIndex> => {
-  return getContentFile("blog.json", { format: "json" })
+export const getBlogIndex = async () => {
+  return getContentJson<BlogIndex>('blog.json')
 }
 
 export const getPosts = async () => {
-  const blog = await getBlogIndex();
+  const blog = await getBlogIndex()
 
   // Sort newest first
   return blog.posts.sort(
@@ -23,19 +25,21 @@ export const getPosts = async () => {
   )
 }
 
-export const getPostBySlug = async (slug: string): Promise<Post> => {
-  const blog = await getBlogIndex();
+/** Returns `null` when the post isn't in blog.json, so drafts are never served. */
+export const getPostBySlug = async (slug: string): Promise<Post | null> => {
+  if (!SLUG.test(slug)) return null
 
-  const metadata = blog.posts.find((p) => p.slug === slug);
-  if (!metadata) {
-    throw new Error("Post not found.")
-  }
-  
-  const raw = await getContentFile(`posts/${slug}.md`)
-  const { content: body } = matter(raw)
+  const blog = await getBlogIndex()
+  const metadata = blog.posts.find((p) => p.slug === slug)
+  if (!metadata) return null
 
-  return {
-    ...metadata,
-    body
+  try {
+    const raw = await getContentFile(`posts/${slug}.md`)
+    const { content: body } = matter(raw)
+    return { ...metadata, body }
+  } catch (err) {
+    // blog.json can briefly list a post the cache can't see yet
+    if (err instanceof ContentNotFoundError) return null
+    throw err
   }
 }

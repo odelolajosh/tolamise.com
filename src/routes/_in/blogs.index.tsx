@@ -48,9 +48,8 @@ function RouteComponent() {
             }).format(new Date(b.createdAt))
 
             return (
-              <Link to={"/blogs/$slug"} params={{ slug: b.slug }} className="no-underline">
+              <Link key={b.slug} to={"/blogs/$slug"} params={{ slug: b.slug }} className="no-underline">
                 <div
-                  key={b.slug}
                   className="flex w-full flex-col gap-3 transition-opacity duration-300 md:gap-2 cursor-pointer p-1"
                 >
                   <div className='flex flex-col gap-3 mx-auto w-5xl border border-transparent hover:border-border p-1'>
@@ -58,7 +57,7 @@ function RouteComponent() {
                       {b.title}
                     </h2>
                     <p className="text-base leading-[1.6] text-muted-foreground font-normal m-0">
-                      {b.description}
+                      {b.excerpt}
                     </p>
                     <div className="flex items-center justify-between">
                       <small>{createdAt}</small>

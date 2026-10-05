@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev --port 3000",
+    "prebuild": "node --env-file-if-exists=.env scripts/snapshot-content.mjs",
     "build": "vite build",
     "serve": "vite preview",
     "test": "vitest run",

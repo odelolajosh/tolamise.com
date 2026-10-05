@@ -1,10 +1,15 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { createServerFn } from '@tanstack/react-start'
 import { getProjectRepositories } from '@/lib/api'
 import * as motion from "motion/react-client"
 import { MoveUpRightIcon } from 'lucide-react'
 
+export const fetchProjects = createServerFn().handler(async () => {
+  return getProjectRepositories()
+})
+
 export const Route = createFileRoute('/_in/projects')({
-  loader: async () => getProjectRepositories(),
+  loader: async () => fetchProjects(),
   component: RouteComponent,
 })
 
