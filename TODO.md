@@ -2,15 +2,8 @@
 
 ## Bugs
 
-- [ ] **The blog is likely empty in production.** `src/lib/api.ts` reads `src/data/posts` from disk relative to the working directory, and the files aren't in `.output/`. The content repo plan in the [README](README.md#planned-content-without-redeploys) fixes this. A stopgap is `import.meta.glob('/src/data/posts/*.md', { query: '?raw', eager: true })`.
-- [ ] **`draft: false` hides a post.** `data.draft?.toLowerCase()` throws when YAML reads `draft` as a boolean, and the error drops the post. Use `data.draft === true || data.draft === 'yes'`.
 - [ ] **Post dates can show a day early.** `new Date("2025-11-09")` is UTC midnight, so it renders as the previous day west of UTC and can differ between server and client. Format the date with `timeZone: 'UTC'` or parse it as a local date.
-- [ ] **Devtools ship to production.** Wrap `TanStackDevtools` in `__root.tsx` with `import.meta.env.DEV`.
-- [ ] **`tsc --noEmit` fails.**
-  - `markdown.tsx` uses the `inline` prop, which react-markdown v9+ removed.
-  - `navigation.tsx` uses `Omit<keyof …, '/'>` where it needs `Exclude<…>`.
 - [ ] **`pnpm lint` doesn't run.** `eslint` isn't installed; only `@tanstack/eslint-config` is.
-- [ ] **Blog card links are untyped.** `blog-card.tsx` uses `<Link to={blog.slug}>`. Use `to="/blogs/$slug" params={{ slug }}`.
 - [ ] **Some CSS in `grid.tsx` has no effect.** `hsl(var(--card))` is invalid because the tokens are oklch, and `bg-grid-black/[0.07]` isn't a Tailwind v4 utility.
 
 ## Performance
@@ -30,9 +23,7 @@
 
 ## Leftovers
 
-- [ ] **`remark-gfm` is installed but not used.** Pass it to `<ReactMarkdown remarkPlugins>` so tables and strikethrough render.
 - [ ] **`package.json` is named `odelolajosh.gg`.**
-- [ ] **shadcn config with no components.** `components.json` and `.cursorrules` are set up for shadcn, but the site has no shadcn components. Remove them or start using it.
 
 ## Content and product
 
@@ -44,7 +35,17 @@
 - [ ] **No tests**, although Vitest and Testing Library are installed. Start with `readPost`: drafts, dates and missing fields.
 - [ ] **Frontmatter isn't validated.** Use the `zod` dependency to give clear errors instead of `undefined` titles.
 
+## Content repo (`tolamise-content`)
+
+- [ ] **Create the repo** with `posts/`, `projects.json` and a generated `blog.json` (`slug`, `title`, `excerpt`, `createdAt`, `updatedAt`, `tags`, `readingTime`).
+- [ ] **Write `scripts/build-index.ts`** with a pre-commit hook and a CI check. Treat `draft: true` (boolean) and `"yes"` as drafts.
+- [ ] **Set `CONTENT_OWNER`, `CONTENT_REPO`, `CONTENT_BRANCH` and `GITHUB_TOKEN`** on the host, including at build time for the snapshot.
+- [ ] **Post images.** A private repo can't serve images to browsers, so they need a proxy route or a public host.
+
 ## Done
 
+- [x] Content comes from `tolamise-content` via the GitHub API, cached for 5 minutes with ETags, falling back to the last good copy and then a build-time snapshot. `CONTENT_DIR` reads a local clone.
+- [x] Devtools load only in dev; they crashed production SSR.
+- [x] `tsc --noEmit` passes.
 - [x] Removed dead components, unused fonts (Inter, General Sans, Zodiak) and unused packages.
 - [x] Theme: `system` follows the OS, the toggle appears on every page, the cookie lasts a year, an invalid cookie falls back to `system`, and the root loader no longer refetches the theme on every navigation.
