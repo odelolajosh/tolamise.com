@@ -12,7 +12,7 @@ export function Markdown({ content }: { content: string }) {
         remarkPlugins={[remarkMath, remakeGfm]}
         rehypePlugins={[rehypeKatex]}
         components={{
-          code: ({ node, className, children, ...props }) => {
+          code: ({ node, className, children, ref, ...props }) => {
             const match = /language-(\w+)/.exec(className || '')
             if (match) {
 
