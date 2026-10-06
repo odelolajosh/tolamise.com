@@ -5,7 +5,6 @@ import { Footer } from '@/components/footer'
 import { cn } from '@/lib/utils'
 
 export const Route = createFileRoute('/')({
-  // Picked in the loader so SSR and hydration agree; staleTime keeps it until refresh
   loader: () => ({
     nameFont: Math.random() < 0.5 ? 'font-display' : 'font-display-secondary',
   }),
@@ -17,7 +16,7 @@ function App() {
   const { nameFont } = Route.useLoaderData()
 
   return (
-    <div className="min-h-screen relative py-10 grid grid-rows-[1fr_auto]">
+    <div className="min-h-screen max-w-screen relative py-10 grid grid-rows-[1fr_auto]">
       <div
         className={cn(
           'absolute inset-0',
