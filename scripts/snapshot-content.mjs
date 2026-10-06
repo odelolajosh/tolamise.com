@@ -13,6 +13,7 @@ async function fetchFile(file) {
       headers: {
         Accept: 'application/vnd.github.raw+json',
         Authorization: `Bearer ${GITHUB_TOKEN}`,
+        'User-Agent': 'joshua-content-loader',
         'X-GitHub-Api-Version': '2022-11-28',
       },
     },

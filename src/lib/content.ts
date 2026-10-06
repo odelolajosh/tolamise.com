@@ -41,6 +41,7 @@ async function fetchFromGitHub(file: string, etag: string | null) {
       headers: {
         Accept: 'application/vnd.github.raw+json',
         Authorization: `Bearer ${GITHUB_TOKEN}`,
+        'User-Agent': 'joshua-content-loader',
         'X-GitHub-Api-Version': '2022-11-28',
         ...(etag ? { 'If-None-Match': etag } : {}),
       },
