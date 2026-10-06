@@ -32,7 +32,7 @@ export const Navigation = () => {
           </Link>
         </li>
       </ul>
-      <ul className="w-full flex justify-center gap-2 md:gap-8 list-none m-0">
+      <ul className={cn("w-full flex justify-center gap-8 list-none m-0", indexed && "gap-4 md:gap-8")}>
         {navigation.map(({ to, label }) => (
           <NavigationLink key={to} to={to} label={label} />
         ))}
