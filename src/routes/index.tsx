@@ -2,6 +2,7 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { Navigation } from '@/components/navigation'
 import { Footer } from '@/components/footer'
 import { cn } from '@/lib/utils'
+import { WarpGrid } from '@/components/home/warp-grid'
 
 export const Route = createFileRoute('/')({
   loader: () => ({
@@ -16,7 +17,7 @@ function App() {
 
   return (
     <div className="relative isolate min-h-svh overflow-hidden py-10 grid grid-rows-[1fr_auto]">
-      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-grid" />
+      <WarpGrid />
       {/* Fades the grid out towards the edges */}
       <div
         aria-hidden="true"
