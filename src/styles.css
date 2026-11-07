@@ -44,7 +44,7 @@
 @font-face {
   font-family: 'Limelight';
   font-style: normal;
-  font-weight: 100 900;
+  font-weight: 400;
   font-display: swap;
   src: url('./fonts/limelight/Limelight-Regular.ttf') format('truetype');
 }
@@ -137,6 +137,20 @@ code {
   --font-sans: var(--font-switzer);
   --font-display: var(--font-melodrama), serif;
   --font-display-secondary: var(--font-limelight), serif;
+
+  --animate-fade-up: fade-up 0.6s ease-out both;
+  --animate-blink: blink 1.1s steps(1) infinite;
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+  }
 }
 
 @layer base {
@@ -192,6 +206,57 @@ code {
 }
 
 @utility container {
+  width: 100%;
+  max-width: 72rem;
   margin-inline: auto;
   padding-inline: 1rem;
+}
+
+/* Faint square grid behind the homepage hero */
+@utility bg-grid {
+  --grid-line: color-mix(in oklch, var(--border) 50%, transparent);
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Each top-level section gets a rule and a § number, matching the contents */
+.prose-sections {
+  counter-reset: section;
+}
+
+.prose-sections > h2 {
+  counter-increment: section;
+  margin-top: 3.5rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.prose-sections > h2:first-child {
+  margin-top: 0;
+}
+
+.prose-sections > h2::before {
+  content: '§' counter(section);
+  display: block;
+  margin-bottom: 0.75rem;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: var(--muted-foreground);
+}
+
+/* Shiki renders both themes into each code block; light is the default */
+.prose pre.shiki {
+  border: 1px solid var(--border);
+}
+
+.shiki,
+.shiki span {
+  @variant dark {
+    color: var(--shiki-dark) !important;
+    background-color: var(--shiki-dark-bg) !important;
+  }
 }

@@ -36,12 +36,22 @@ if (!CONTENT_OWNER || !CONTENT_REPO || !GITHUB_TOKEN) {
   snapshot['projects.json'] = await fetchFile('projects.json')
 
   const { posts } = JSON.parse(snapshot['blog.json'])
+  // Only projects with a slug have a case study
+  const caseStudies = JSON.parse(snapshot['projects.json'])
+    .map((p) => p.slug)
+    .filter(Boolean)
+  const files = [
+    ...posts.map(({ slug }) => `posts/${slug}.md`),
+    ...caseStudies.map((slug) => `projects/${slug}.md`),
+  ]
   await Promise.all(
-    posts.map(async ({ slug }) => {
-      snapshot[`posts/${slug}.md`] = await fetchFile(`posts/${slug}.md`)
+    files.map(async (file) => {
+      snapshot[file] = await fetchFile(file)
     }),
   )
 
   write(snapshot)
-  console.log(`Content snapshot: ${posts.length} posts`)
+  console.log(
+    `Content snapshot: ${posts.length} posts, ${caseStudies.length} case studies`,
+  )
 }

@@ -8,9 +8,11 @@ export const Route = createFileRoute('/_in')({
 
 function RouteComponent() {
   return (
-    <div className="container min-h-screen flex flex-col gap-10 py-10">
+    <div className="container min-h-svh flex flex-col gap-10 py-10">
       <Navigation />
-      <Outlet />
+      <main className="flex flex-1 flex-col gap-10">
+        <Outlet />
+      </main>
       <Footer />
     </div>
   )

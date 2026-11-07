@@ -4,6 +4,7 @@ import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 import appCss from '../styles.css?url'
 import { ThemeProvider } from '@/components/theme/theme-provider'
 import { getThemeServerFn } from '@/lib/theme'
+import { NotFound } from '@/components/not-found'
 
 // Loaded only in dev; the devtools crash when imported during production SSR
 const Devtools = import.meta.env.DEV
@@ -39,7 +40,7 @@ export const Route = createRootRoute({
   loader: () => getThemeServerFn(),
   // Only refetch the theme after setTheme invalidates, not on every navigation
   staleTime: Infinity,
-  notFoundComponent: () => <div>Not found</div>,
+  notFoundComponent: NotFound,
   shellComponent: RootDocument,
 })
 

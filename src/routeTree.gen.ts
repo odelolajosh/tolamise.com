@@ -9,24 +9,26 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as InRouteImport } from './routes/_in'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as InProjectsRouteImport } from './routes/_in/projects'
+import { Route as InRouteImport } from './routes/_in'
+import { Route as InContactRouteImport } from './routes/_in/contact'
 import { Route as InBlogsIndexRouteImport } from './routes/_in/blogs.index'
 import { Route as InBlogsSlugRouteImport } from './routes/_in/blogs.$slug'
+import { Route as InProjectsIndexRouteImport } from './routes/_in/projects.index'
+import { Route as InProjectsSlugRouteImport } from './routes/_in/projects.$slug'
 
-const InRoute = InRouteImport.update({
-  id: '/_in',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const InProjectsRoute = InProjectsRouteImport.update({
-  id: '/projects',
-  path: '/projects',
+const InRoute = InRouteImport.update({
+  id: '/_in',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InContactRoute = InContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
   getParentRoute: () => InRoute,
 } as any)
 const InBlogsIndexRoute = InBlogsIndexRouteImport.update({
@@ -39,39 +41,69 @@ const InBlogsSlugRoute = InBlogsSlugRouteImport.update({
   path: '/blogs/$slug',
   getParentRoute: () => InRoute,
 } as any)
+const InProjectsIndexRoute = InProjectsIndexRouteImport.update({
+  id: '/projects/',
+  path: '/projects/',
+  getParentRoute: () => InRoute,
+} as any)
+const InProjectsSlugRoute = InProjectsSlugRouteImport.update({
+  id: '/projects/$slug',
+  path: '/projects/$slug',
+  getParentRoute: () => InRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/projects': typeof InProjectsRoute
+  '/contact': typeof InContactRoute
   '/blogs/$slug': typeof InBlogsSlugRoute
-  '/blogs': typeof InBlogsIndexRoute
+  '/projects/$slug': typeof InProjectsSlugRoute
+  '/blogs/': typeof InBlogsIndexRoute
+  '/projects/': typeof InProjectsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/projects': typeof InProjectsRoute
+  '/contact': typeof InContactRoute
   '/blogs/$slug': typeof InBlogsSlugRoute
+  '/projects/$slug': typeof InProjectsSlugRoute
   '/blogs': typeof InBlogsIndexRoute
+  '/projects': typeof InProjectsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_in': typeof InRouteWithChildren
-  '/_in/projects': typeof InProjectsRoute
+  '/_in/contact': typeof InContactRoute
   '/_in/blogs/$slug': typeof InBlogsSlugRoute
+  '/_in/projects/$slug': typeof InProjectsSlugRoute
   '/_in/blogs/': typeof InBlogsIndexRoute
+  '/_in/projects/': typeof InProjectsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/projects' | '/blogs/$slug' | '/blogs'
+  fullPaths:
+    | '/'
+    | '/contact'
+    | '/blogs/$slug'
+    | '/projects/$slug'
+    | '/blogs/'
+    | '/projects/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/projects' | '/blogs/$slug' | '/blogs'
+  to:
+    | '/'
+    | '/contact'
+    | '/blogs/$slug'
+    | '/projects/$slug'
+    | '/blogs'
+    | '/projects'
   id:
     | '__root__'
     | '/'
     | '/_in'
-    | '/_in/projects'
+    | '/_in/contact'
     | '/_in/blogs/$slug'
+    | '/_in/projects/$slug'
     | '/_in/blogs/'
+    | '/_in/projects/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -81,13 +113,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/_in': {
-      id: '/_in'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof InRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -95,17 +120,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_in/projects': {
-      id: '/_in/projects'
-      path: '/projects'
-      fullPath: '/projects'
-      preLoaderRoute: typeof InProjectsRouteImport
+    '/_in': {
+      id: '/_in'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof InRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_in/contact': {
+      id: '/_in/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof InContactRouteImport
       parentRoute: typeof InRoute
     }
     '/_in/blogs/': {
       id: '/_in/blogs/'
       path: '/blogs'
-      fullPath: '/blogs'
+      fullPath: '/blogs/'
       preLoaderRoute: typeof InBlogsIndexRouteImport
       parentRoute: typeof InRoute
     }
@@ -116,19 +148,37 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InBlogsSlugRouteImport
       parentRoute: typeof InRoute
     }
+    '/_in/projects/': {
+      id: '/_in/projects/'
+      path: '/projects'
+      fullPath: '/projects/'
+      preLoaderRoute: typeof InProjectsIndexRouteImport
+      parentRoute: typeof InRoute
+    }
+    '/_in/projects/$slug': {
+      id: '/_in/projects/$slug'
+      path: '/projects/$slug'
+      fullPath: '/projects/$slug'
+      preLoaderRoute: typeof InProjectsSlugRouteImport
+      parentRoute: typeof InRoute
+    }
   }
 }
 
 interface InRouteChildren {
-  InProjectsRoute: typeof InProjectsRoute
+  InContactRoute: typeof InContactRoute
   InBlogsSlugRoute: typeof InBlogsSlugRoute
+  InProjectsSlugRoute: typeof InProjectsSlugRoute
   InBlogsIndexRoute: typeof InBlogsIndexRoute
+  InProjectsIndexRoute: typeof InProjectsIndexRoute
 }
 
 const InRouteChildren: InRouteChildren = {
-  InProjectsRoute: InProjectsRoute,
+  InContactRoute: InContactRoute,
   InBlogsSlugRoute: InBlogsSlugRoute,
+  InProjectsSlugRoute: InProjectsSlugRoute,
   InBlogsIndexRoute: InBlogsIndexRoute,
+  InProjectsIndexRoute: InProjectsIndexRoute,
 }
 
 const InRouteWithChildren = InRoute._addFileChildren(InRouteChildren)
